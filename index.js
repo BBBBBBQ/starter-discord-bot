@@ -9,7 +9,7 @@ const CHANNEL_ID = "1035078884359684136"
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-const wake = "F"
+const wakeB = "F"
 
 const app = express();
 // app.use(bodyParser.json());
@@ -35,7 +35,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     console.log(interaction.data.name)
 
     if(interaction.data.name == 'wake'){
-      wake = "T"
+      wakeB = "T"
       try{
         let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
           content:'おはようございます!',
