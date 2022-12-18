@@ -94,6 +94,11 @@ app.get('/register_commands', async (req,res) =>{
       "options": []
     },
     {
+      "name": "post2D",
+      "description": "メッセージ送れるかテストする",
+      "options": []
+    },
+    {
       "name": "dm",
       "description": "sends user a DM",
       "options": []
