@@ -9,7 +9,7 @@ const CHANNEL_ID = "1035078884359684136"
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-const wakeB = "F"
+let wakeB = "F"
 
 const app = express();
 // app.use(bodyParser.json());
