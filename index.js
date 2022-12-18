@@ -9,7 +9,7 @@ const CHANNEL_ID = "1035078884359684136"
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-
+const wake = False
 
 const app = express();
 // app.use(bodyParser.json());
@@ -33,6 +33,22 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     console.log(interaction.data.name)
+
+    if(interaction.data.name == 'wake'){
+      try{
+        let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
+          content:'おはようございます!',
+          "embeds": [{
+            "title": "BOT起動完了！",
+            "description": "BOT実行中〜"
+          }]
+        })
+        console.log(res.data)
+      }catch(e){
+        console.log(e)
+      }
+    }
+
     if(interaction.data.name == 'yo'){
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
@@ -91,6 +107,11 @@ app.get('/register_commands', async (req,res) =>{
     {
       "name": "yo",
       "description": "replies with Yo!",
+      "options": []
+    },
+    {
+      "name": "wake",
+      "description": "BOTを起動します",
       "options": []
     },
     {
