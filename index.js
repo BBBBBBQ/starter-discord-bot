@@ -35,6 +35,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     console.log(interaction.data.name)
 
     if(interaction.data.name == 'wake'){
+      wake = True
       try{
         let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
           content:'おはようございます!',
