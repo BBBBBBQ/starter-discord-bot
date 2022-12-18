@@ -42,7 +42,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       });
     }
   
-    if(interaction.data.name == 'post2D'){
+    if(interaction.data.name == 'post2d'){
         try{
           let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
             content:'Yo!',
@@ -94,7 +94,7 @@ app.get('/register_commands', async (req,res) =>{
       "options": []
     },
     {
-      "name": "post2D",
+      "name": "post2d",
       "description": "メッセージ送れるかテストする",
       "options": []
     },
