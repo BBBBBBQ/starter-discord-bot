@@ -105,7 +105,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 app.post('/sales_post', async (req,res) =>{
   const interaction = req.body;
 	console.log("SALES アップデートしました！")
-	console.log("リクエストの中身は→" + interaction)
+	console.log("リクエストの中身は→" + interaction.price)
   //ボットが起きてるかチェックする
   //if (wakeB == "T"){
   //チャンネルにメッセージ送ってみる　⭕ここから編集再開する
