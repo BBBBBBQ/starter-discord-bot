@@ -14,6 +14,13 @@ let wakeB = "F"
 const app = express();
 // app.use(bodyParser.json());
 
+const apiURL = "https://api.helius.xyz/v0/addresses"
+const address = "Fxjy8g9ABo8ZcZEh8B3M21fZdz8Sb56mVBpBznKynw6B" //ロイヤリティ
+const resource = "nft-events"
+const options = `api-key=c4b5b565-3a26-45e2-b28c-e3c96cbae8c1&type=NFT_SALE` //APIキーを入れる
+let mostRecentTxn = ""
+const pollingInterval = 5000; // ms
+
 const discord_api = axios.create({
   baseURL: 'https://discord.com/api/',
   timeout: 3000,
@@ -33,6 +40,11 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     console.log(interaction.data.name)
 
     if(interaction.data.name == 'wake'){
+        //投稿の準備する
+        runSalesbot();
+      }
+
+    if(interaction.data.name == 'wakeup'){
       wakeB = "T"
       try{
         let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
@@ -98,6 +110,94 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   }
 
 });
+
+const runSalesBot = async () => {
+    console.log("starting sales bot...");
+    while (true) {
+        let url = `${apiURL}/${address}/${resource}?${options}&until=${mostRecentTxn}`
+        const { data } = await axios.get(url)
+
+        if (!data.length) {
+            console.log("polling...")
+            await timer(pollingInterval);
+            continue; } 
+            
+        for (let i = data.length - 96; i >= 0; i--) {
+            try {
+                const mintAD = data[i].nfts[0].mint //ミントアドレス
+                const dateString = new Date(data[i].timestamp * 1000).toLocaleString();
+                const P_row = data[i].amount* 0.000000001 
+                const price = ((Math.round(P_row * 1000)) / 1000)
+
+                const metadata = await getMetadataME(mintAD);
+                if (!metadata) {
+                    console.log("couldn't get metadata");
+                    continue;
+                }
+                else printSalesInfo(dateString, price, data[i].signature, metadata.name, data[i].source, metadata.image);                                      
+                await postSalesToDiscord(metadata.name, price, dateString, data[i],signature, metadata.image)
+                await timer(pollingInterval);        
+                }
+            catch (err) {
+                        console.log("error while going through getMetadataME(mintAD)まわりのtryの中で", err);
+                        continue;
+                } 
+            }
+            lastKnownSignature = data[i].signature;
+            if (lastKnownSignature) {
+                mostRecentTxn = lastKnownSignature;
+                console.log("lastknownsignatureに " + mostRecentTxn + " を入れました");
+            }
+    }
+} 
+
+
+////////////
+const postSalesToDiscord = async (title, price, date, signature, imageURL) => {
+    try{
+        let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
+        content:'NEW SALES',
+        "embeds": [
+            {
+                "title": `SALE`,
+                "description": `${title}`,
+                "fields": [
+                    {
+                        "name": "Price",
+                        "value": `${price} SOL`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Date",
+                        "value": `${date}`,
+                        "inline": true
+                    },
+                    {
+                        "name": "Explorer",
+                        "value": `https://explorer.solana.com/tx/${signature}`
+                    }
+                ],
+                "image": {
+                    "url": `${imageURL}`,
+                }
+            }]  
+        })
+        console.log(res.data)
+    }catch(e){
+        console.log(e)
+    }
+}
+
+/////////////////
+
+const printSalesInfo = (date, price, signature, title, marketplace, imageURL) => {
+    console.log("-------------------------------------------")
+    console.log(`Sale at ${date} ---> ${price} SOL`)
+    console.log("Signature: ", signature)
+    console.log("Name: ", title)
+    console.log("Image: ", imageURL)
+    console.log("Marketplace: ", marketplace)
+}
 
 //////////////////////////////////////ここから下
 
@@ -165,8 +265,13 @@ app.get('/register_commands', async (req,res) =>{
       "options": []
     },
     {
-      "name": "wake",
-      "description": "BOTを起動します",
+        "name": "wake",
+        "description": "BOTを起動します",
+        "options": []
+    },
+    {
+      "name": "wakeup",
+      "description": "BOTの起動サンプル",
       "options": []
     },
     {
