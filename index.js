@@ -26,8 +26,6 @@ const discord_api = axios.create({
 });
 
 
-
-
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   const interaction = req.body;
 
@@ -38,10 +36,10 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       wakeB = "T"
       try{
         let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
-          content:'おはようございます!',
+          content:'おはようございま-す!',
           "embeds": [{
             "title": "BOT起動完了！",
-            "description": "BOT実行中〜"
+            "description": "実行中〜"
           }]
         })
         console.log(res.data)
@@ -100,6 +98,63 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   }
 
 });
+
+//////////////////////////////////////ここから下
+
+//ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
+app.get('/sales_post', async (req,res) =>{
+  //ボットが起きてるかチェックする
+  if (wakeB == "T"){
+  //EMBEDの準備する
+    let emb_junbi = [
+      {
+         "embeds": [
+              {
+                  "title": `SALE`,
+                  "description": `${title}`,
+                  "fields": [
+                      {
+                          "name": "Price",
+                          "value": `${price} SOL`,
+                          "inline": true
+                      },
+                      {
+                          "name": "Date",
+                          "value": `${date}`,
+                          "inline": true
+                      },
+                      {
+                          "name": "Explorer",
+                          "value": `https://explorer.solana.com/tx/${signature}`
+                      }
+                  ],
+                  "image": {
+                      "url": `${imageURL}`,
+                  }
+              }
+          ]
+      }
+    ]
+  //チャンネルにメッセージ送ってみる　⭕ここから編集再開する
+  try{
+    let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
+      content:'SALES!',
+      "embeds": [{
+        "title": "SALES UPDATE",
+        "description": "情報更新しまーす"
+      }]
+    })
+    console.log(res.data)
+  }catch(e){
+    console.log(e)
+  }
+} else {
+  console.log("Wake the bot first!");
+}
+})
+
+
+//////////////////////////////////////ここから上
 
 
 
