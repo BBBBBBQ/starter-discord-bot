@@ -103,48 +103,47 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
 //ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
 app.post('/sales_post', async (req,res) =>{
+  const interaction = req.body;
   //ボットが起きてるかチェックする
   //if (wakeB == "T"){
-  //EMBEDの準備する
-    // let emb_junbi = [
-    //   {
-    //      "embeds": [
-    //           {
-    //               "title": `SALE`,
-    //               "description": `${title}`,
-    //               "fields": [
-    //                   {
-    //                       "name": "Price",
-    //                       "value": `${price} SOL`,
-    //                       "inline": true
-    //                   },
-    //                   {
-    //                       "name": "Date",
-    //                       "value": `${date}`,
-    //                       "inline": true
-    //                   },
-    //                   {
-    //                       "name": "Explorer",
-    //                       "value": `https://explorer.solana.com/tx/${signature}`
-    //                   }
-    //               ],
-    //               "image": {
-    //                   "url": `${imageURL}`,
-    //               }
-    //           }
-    //       ]
-    //   }
-    // ]
   //チャンネルにメッセージ送ってみる　⭕ここから編集再開する
   try{
     let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
       content:'SALES!',
-      "embeds": [{
-        "title": "SALES UPDATE",
-        "description": "情報更新しまーす"
-      }]
+      "embeds": [
+        {
+          "title": `SALE`,
+          "description": `${interaction.title}`,
+          "fields": [
+            {
+                "name": "Price",
+                "value": `${interaction.price} SOL`,
+                "inline": true
+            },
+            {
+                "name": "Date",
+                "value": `${interaction.date}`,
+                "inline": true
+            },
+            {
+                "name": "Explorer",
+                "value": `https://explorer.solana.com/tx/${interaction.signature}`
+            }
+        ],
+          "image": {
+            "url": `${interaction.imageURL}`,
+          }
+        }
+      ]
+      // "embeds": [
+      //   {
+      //   "title": "SALES UPDATE",
+      //   "description": "情報更新しまーす" + req.
+      // }]
     })
-    console.log(res.data)
+    // console.log(res.data)
+    console.log("SALES アップデートしました！")
+    console.log("リクエストの中身は→" + interaction.title)
   }catch(e){
     console.log(e)
   }
