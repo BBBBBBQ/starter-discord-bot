@@ -128,7 +128,7 @@ const runSalesBot = async () => {
                 const dateString = new Date(data[i].timestamp * 1000).toLocaleString();
                 const P_row = data[i].amount* 0.000000001 
                 const price = ((Math.round(P_row * 1000)) / 1000)
-
+                console.log("ミントアドレスはーーーーーー→" + mintAD)
                 const metadata = await getMetadataME(mintAD);
                 if (!metadata) {
                     console.log("couldn't get metadata");
