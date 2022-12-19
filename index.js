@@ -41,7 +41,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
     if(interaction.data.name == 'wake'){
         //投稿の準備する
-        runSalesbot();
+        runSalesBot();
       }
 
     if(interaction.data.name == 'wakeup'){
