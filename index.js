@@ -135,7 +135,7 @@ const runSalesBot = async () => {
                     continue;
                 }
                 else printSalesInfo(dateString, price, data[i].signature, metadata.name, data[i].source, metadata.image);                                      
-                await postSalesToDiscord(metadata.name, price, dateString, data[i],signature, metadata.image)
+                await postSalesToDiscord(metadata.name, price, dateString, data[i].signature, metadata.image)
                 await timer(pollingInterval);        
                 }
             catch (err) {
