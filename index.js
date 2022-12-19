@@ -104,6 +104,8 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 //ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
 app.post('/sales_post', async (req,res) =>{
   const interaction = req.body;
+	console.log("SALES アップデートしました！")
+	console.log("リクエストの中身は→" + interaction.title)
   //ボットが起きてるかチェックする
   //if (wakeB == "T"){
   //チャンネルにメッセージ送ってみる　⭕ここから編集再開する
@@ -113,7 +115,7 @@ app.post('/sales_post', async (req,res) =>{
       "embeds": [
         {
           "title": `SALE`,
-          "description": `${interaction.title}`,
+          "description": interaction.title,
           "fields": [
             {
                 "name": "Price",
@@ -142,8 +144,6 @@ app.post('/sales_post', async (req,res) =>{
       // }]
     })
     // console.log(res.data)
-    console.log("SALES アップデートしました！")
-    console.log("リクエストの中身は→" + interaction.title)
   }catch(e){
     console.log(e)
   }
