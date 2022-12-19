@@ -200,6 +200,17 @@ const printSalesInfo = (date, price, signature, title, marketplace, imageURL) =>
     console.log("Marketplace: ", marketplace)
 }
 
+/////////////////
+
+const getMetadataME = async (tokenPubKey) => {                                                            //tokenPubkey = 取引されたNFTのミントアドレス
+    try {
+        const { data } = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + tokenPubKey);   //{data}にいれる。GETする（MEのこのNFTについてのURL）の情報を｛配列｝として
+        return data;                                                                                      //MEのAPIをaxios.getで叩いて、当該のNFTについてのメタ情報を"data"として返すよ。
+    } catch (error) {
+        console.log("error fetching MEmetadata: ", error)
+    }
+}
+
 //////////////////////////////////////ここから下
 
 //ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
