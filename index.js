@@ -106,35 +106,35 @@ app.post('/sales_post', async (req,res) =>{
   //ボットが起きてるかチェックする
   //if (wakeB == "T"){
   //EMBEDの準備する
-    let emb_junbi = [
-      {
-         "embeds": [
-              {
-                  "title": `SALE`,
-                  "description": `${title}`,
-                  "fields": [
-                      {
-                          "name": "Price",
-                          "value": `${price} SOL`,
-                          "inline": true
-                      },
-                      {
-                          "name": "Date",
-                          "value": `${date}`,
-                          "inline": true
-                      },
-                      {
-                          "name": "Explorer",
-                          "value": `https://explorer.solana.com/tx/${signature}`
-                      }
-                  ],
-                  "image": {
-                      "url": `${imageURL}`,
-                  }
-              }
-          ]
-      }
-    ]
+    // let emb_junbi = [
+    //   {
+    //      "embeds": [
+    //           {
+    //               "title": `SALE`,
+    //               "description": `${title}`,
+    //               "fields": [
+    //                   {
+    //                       "name": "Price",
+    //                       "value": `${price} SOL`,
+    //                       "inline": true
+    //                   },
+    //                   {
+    //                       "name": "Date",
+    //                       "value": `${date}`,
+    //                       "inline": true
+    //                   },
+    //                   {
+    //                       "name": "Explorer",
+    //                       "value": `https://explorer.solana.com/tx/${signature}`
+    //                   }
+    //               ],
+    //               "image": {
+    //                   "url": `${imageURL}`,
+    //               }
+    //           }
+    //       ]
+    //   }
+    // ]
   //チャンネルにメッセージ送ってみる　⭕ここから編集再開する
   try{
     let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
