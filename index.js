@@ -211,6 +211,10 @@ const getMetadataME = async (tokenPubKey) => {                                  
     }
 }
 
+////////////////
+
+const timer = ms => new Promise(res => setTimeout(res, ms))
+
 //////////////////////////////////////ここから下
 
 //ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
