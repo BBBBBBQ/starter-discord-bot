@@ -102,7 +102,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 //////////////////////////////////////ここから下
 
 //ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
-app.get('/sales_post', async (req,res) =>{
+app.post('/sales_post', async (req,res) =>{
   //ボットが起きてるかチェックする
   if (wakeB == "T"){
   //EMBEDの準備する
