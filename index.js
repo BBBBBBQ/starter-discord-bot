@@ -41,7 +41,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 
     if(interaction.data.name == 'wake'){
         //投稿の準備する
-        runSalesBot();
+        runSalesBSot();
       }
 
     if(interaction.data.name == 'wakeup'){
@@ -142,12 +142,13 @@ const runSalesBot = async () => {
                         console.log("error while going through getMetadataME(mintAD)まわりのtryの中で", err);
                         continue;
                 } 
-            }
+            
             lastKnownSignature = data[i].signature;
             if (lastKnownSignature) {
                 mostRecentTxn = lastKnownSignature;
                 console.log("lastknownsignatureに " + mostRecentTxn + " を入れました");
             }
+        }
     }
 } 
 
