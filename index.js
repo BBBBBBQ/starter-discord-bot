@@ -104,7 +104,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
 //ポストしたいよ〜　の受け口をつくります。ここにPOSTしたら、DICSCORDに投稿してくれるようにセットします。
 app.post('/sales_post', async (req,res) =>{
   //ボットが起きてるかチェックする
-  if (wakeB == "T"){
+  //if (wakeB == "T"){
   //EMBEDの準備する
     let emb_junbi = [
       {
@@ -148,9 +148,9 @@ app.post('/sales_post', async (req,res) =>{
   }catch(e){
     console.log(e)
   }
-} else {
-  console.log("Wake the bot first!");
-}
+// } else {
+//   console.log("Wake the bot first!");
+// }
 })
 
 
