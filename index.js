@@ -5,6 +5,7 @@ const TOKEN = process.env.TOKEN
 const PUBLIC_KEY = process.env.PUBLIC_KEY || 'not set'
 const GUILD_ID = process.env.GUILD_ID 
 const CHANNEL_ID = "1035078884359684136"
+const ZIBUN = "https://long-tan-hippopotamus-veil.cyclic.app"
 
 const axios = require('axios')
 const express = require('express');
@@ -39,12 +40,13 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
     console.log(interaction.data.name)
 
-    if(interaction.data.name == 'wake'){
+    if(interaction.data.name == 'wake'){    //SALESBOTを起動するためのコマンド
         //投稿の準備する
         runSalesBot();
       }
 
-    if(interaction.data.name == 'wakeup'){
+
+    if(interaction.data.name == 'wakeup'){  //ドキュメント送れるかのテストのコマンド
       wakeB = "T"
       try{
         let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
@@ -60,7 +62,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       }
     }
 
-    if(interaction.data.name == 'yo'){
+    if(interaction.data.name == 'yo'){  //返信テストのコマンド
       return res.send({
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data: {
@@ -69,7 +71,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       });
     }
   
-    if(interaction.data.name == 'post2d'){
+    if(interaction.data.name == 'post2d'){  //メッセージ送れるかテストするコマンド
         try{
           let res = await discord_api.post(`/channels/${CHANNEL_ID}/messages`,{
             content:'Yo!',
@@ -84,7 +86,7 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
         }
     }
 
-    if(interaction.data.name == 'dm'){
+    if(interaction.data.name == 'dm'){  //DM送ってみるコマンド
       // https://discord.com/developers/docs/resources/user#create-dm
       let c = (await discord_api.post(`/users/@me/channels`,{
         recipient_id: interaction.member.user.id
@@ -135,22 +137,43 @@ const runSalesBot = async () => {
                     continue;
                 }
                 else printSalesInfo(dateString, price, data[i].signature, metadata.name, data[i].source, metadata.image);                                      
-                await postSalesToDiscord(metadata.name, price, dateString, data[i].signature, metadata.image)
-                await timer(pollingInterval);        
+                await postSalesToDiscord(metadata.name, price, dateString, data[i].signature, metadata.image);
+                await timer(pollingInterval); 
+                await axios.post(ZIBUN + "/MRT", "モストリーセントトランザクション" //mostRecentTxn //テキストとして mostrecentTxn を送る);
+            );               
                 }
             catch (err) {
-                        console.log("error while going through getMetadataME(mintAD)まわりのtryの中で", err);
+                        console.log("tryの中でエラーが出ました", err);
                         continue;
                 } 
-            
-            lastKnownSignature = data[i].signature;
-            if (lastKnownSignature) {
-                mostRecentTxn = lastKnownSignature;
-                console.log("lastknownsignatureに " + mostRecentTxn + " を入れました");
-            }
+        }
+        lastKnownSignature = data[0].signature;
+        if (lastKnownSignature) {
+            mostRecentTxn = lastKnownSignature;
+            console.log("lastknownsignatureに " + mostRecentTxn + " を入れました");
+            await axios.post(ZIBUN + "/MRT", mostRecentTxn //テキストとして mostrecentTxn を送る);
+            );
         }
     }
-} 
+}
+
+var TxnList = [
+    {
+        txn: "",
+        txnSub: "SUB"
+    }
+]
+
+app.post("/MRT", async (req,res) =>{
+    TxnList[0].txn = req.body //←つまりはMRT みたいなの
+    console.log("MRT機能しました" + Txnlist[0].txn + " をsyutoku");
+})
+
+
+const SalesFanctionForCron = async () => {
+    //ほぼ上のセールスボットと一緒だけど、このページのmostRecentTxnを使ってポーリングする
+}
+
 
 
 ////////////
