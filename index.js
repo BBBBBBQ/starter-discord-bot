@@ -139,6 +139,7 @@ const runSalesBot = async () => {
                 else printSalesInfo(dateString, price, data[i].signature, metadata.name, data[i].source, metadata.image);                                      
                 await postSalesToDiscord(metadata.name, price, dateString, data[i].signature, metadata.image);
                 await timer(pollingInterval); 
+                //★下はテストでいずれ消す
                 await axios.post(ZIBUN + "/MRT", "モストリーセントトランザクション" //mostRecentTxn //テキストとして mostrecentTxn を送る);
             );               
                 }
@@ -151,6 +152,7 @@ const runSalesBot = async () => {
         if (lastKnownSignature) {
             mostRecentTxn = lastKnownSignature;
             console.log("lastknownsignatureに " + mostRecentTxn + " を入れました");
+            //★こっちが本当に機能してほしい方
             await axios.post(ZIBUN + "/MRT", mostRecentTxn //テキストとして mostrecentTxn を送る);
             );
         }
@@ -169,10 +171,17 @@ app.post("/MRT", async (req,res) =>{
     console.log("MRT機能しました" + TxnList[0].txn + " をsyutoku");
 })
 
+app.get("/MRT", async (req,res) =>{
+    console.log("MRTへのGETが機能しました" + TxnList[0] + " をsyutoku");
+    return TxnList[0].txn 
+})
+
 
 const SalesFanctionForCron = async () => {
     //ほぼ上のセールスボットと一緒だけど、このページのmostRecentTxnを使ってポーリングする
-}
+    // /MRT　にゲットしに行く  
+    MRT = await axios.get(ZIBUN + "/MRT")
+    
 
 
 
