@@ -167,8 +167,8 @@ var TxnList = [
 ]
 
 app.post("/MRT", async (req,res) =>{
-    TxnList[0].txn = req.body //←つまりはMRT みたいなの
-    console.log("MRT機能しました" + TxnList[0].txn + " をsyutoku");
+    TxnList.txn = req.body //←つまりはMRT みたいなの
+    console.log("MRT機能しました" + TxnList.txn + " をsyutoku");
 })
 
 app.get("/MRT", async (req,res) =>{
