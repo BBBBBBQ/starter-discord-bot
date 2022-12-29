@@ -10,6 +10,7 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
+const { response } = require('express')
 
 
 const app = express();
@@ -116,13 +117,22 @@ app.use(express.json())
 const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzzQKzB3kjKOKpLYIjCi9xTmXw_6KzcD65cU3FRLFsR-JY9c-72zxAX2gNOZpweh4";
 
 app.post("/discord", async (req, res) => {
+  axios.interceptors.request.use(req =>{
+    console.log('リスエストはじめ', req)
+    return request
+  })
+  axios.interceptors.response.use(res =>{
+    console.log('レスポンスはじめ', res)
+    return response
+  })
+
   postToDiscord(req.body[0]);
 })
 
 const postToDiscord = (txn) => {
 //ミントアドレスを変数にいれる
-const mintAD = txn.nfts[0].mint //⭕ここの指定がうまく行かない
-console.log("ミントアドレスをゲットしました" + mintAD)
+//const mintAD = txn.nfts[0].mint //⭕ここの指定がうまく行かない
+//console.log("ミントアドレスをゲットしました" + mintAD)
 //getMetadataMEをする
 
 //足りない要素を入れてあげる
@@ -145,7 +155,7 @@ console.log("ミントアドレスをゲットしました" + mintAD)
             },
             {
                 "name": "Mint",
-                "value": `MintAD ${mintAD}`,
+                "value": `MintAD`, //${mintAD}
                 "inline": true
             },
             {
