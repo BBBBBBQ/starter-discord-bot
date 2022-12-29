@@ -118,12 +118,12 @@ const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzz
 
 app.post("/discord", async (req, res) => {
   axios.interceptors.request.use(req =>{
-    console.log('リスエストはじめ', req)
-    return request
+    console.log('リスエストはじめ', req.body[0])
+    //return request
   })
   axios.interceptors.response.use(res =>{
     console.log('レスポンスはじめ', res)
-    return response
+    //return response
   })
 
   postToDiscord(req.body[0]);
