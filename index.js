@@ -120,16 +120,43 @@ app.post("/discord", async (req, res) => {
 })
 
 const postToDiscord = (txn) => {
+//ミントアドレスを変数にいれる
+const mintAD = txn.nfts[0].mint
+console.log ("ミントアドレスをゲットしました" + mintAD)
+//getMetadataMEをする
+
+//足りない要素を入れてあげる
+//何がうれたか現物の名前
+//プライス　amount から計算してあげる　クラッシュするかも
+//日付　これも　 timestamp から変更してあげる
+//画像
+
   axios.post(DISCORD_URL,
     {
       "embeds": [
         {
-          "title": txn.type,
+          "title": "SALE",
           "description": txn.description,
           "fields": [
             {
-              "name": "Explorer",
-              "value": `https://explorer.solana.com/tx/${txn.signature}`
+                "name": "Price",
+                "value": `AMOUNT ${txn.amount} SOL`,
+                "inline": true
+            },
+            {
+                "name": "Mint",
+                "value": `MintAD ${mintAD}` ,
+                "inline": true
+            },
+            {
+                "name": "Date",
+                "value": `Time Stamp ${txn.timestamp}` ,
+                "inline": true
+            },
+            {
+                "name": "Explorer",
+                "value": `https://explorer.solana.com/tx/${txn.signature}`,
+                "inline": true
             }
           ],
         }
