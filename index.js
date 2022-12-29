@@ -121,8 +121,8 @@ app.post("/discord", async (req, res) => {
 
 const postToDiscord = (txn) => {
 //ミントアドレスを変数にいれる
-const mintAD = txn.nfts.mint
-console.log ("ミントアドレスをゲットしました" + mintAD)
+const mintAD = txn.nfts[0].mint //⭕ここの指定がうまく行かない
+console.log("ミントアドレスをゲットしました" + mintAD)
 //getMetadataMEをする
 
 //足りない要素を入れてあげる
@@ -145,7 +145,7 @@ console.log ("ミントアドレスをゲットしました" + mintAD)
             },
             {
                 "name": "Mint",
-                "value": `MintAD ${mintAD}` ,
+                "value": `MintAD ${mintAD}`,
                 "inline": true
             },
             {
