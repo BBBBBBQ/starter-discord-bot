@@ -106,7 +106,7 @@ app.get('/', async (req,res) =>{
 
 
 app.listen(8999, () => {
-    console.log(`Example server listening on port ${port}`)
+    console.log(`Example server listening on port 8999`)
 })
 
 //FROM HE
