@@ -120,6 +120,7 @@ app.post("/discord", async (req, res) => {
 })
 
 const postToDiscord = (txn) => {
+    const dateString = new Date(txn.timestamp * 1000).toLocaleString();
 //ミントアドレスを変数にいれる
 //const mintAD = txn.nfts[0].mint //⭕ここの指定がうまく行かない
 //console.log("ミントアドレスをゲットしました" + mintAD)
@@ -140,7 +141,7 @@ const postToDiscord = (txn) => {
           "fields": [
             {
                 "name": "Price",
-                "value": `AMOUNT ${txn.amount} SOL`,
+                "value": `SIGN ${txn.signature} SOL`,
                 "inline": true
             },
             {
@@ -150,7 +151,7 @@ const postToDiscord = (txn) => {
             },
             {
                 "name": "Date",
-                "value": `Time Stamp ${txn.timestamp}` ,
+                "value": dateString,
                 "inline": true
             },
             {
