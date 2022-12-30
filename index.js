@@ -10,7 +10,7 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-
+const solanaWeb3 = require('@solana/web3.js');
 
 const app = express();
 // app.use(bodyParser.json());
@@ -119,18 +119,25 @@ app.post("/discord", async (req, res) => {
   postToDiscord(req.body[0]);
 })
 
-const postToDiscord = (txn) => {
-    const dateString = new Date(txn.timestamp * 1000).toLocaleString();
-//ミントアドレスを変数にいれる
-//const mintAD = txn.nfts[0].mint //⭕ここの指定がうまく行かない
-//console.log("ミントアドレスをゲットしました" + mintAD)
-//getMetadataMEをする
+const postToDiscord = async (txn) => {
+    let Mkey = await solanaConnection.getTransaction(txn.signature);
+    
+    //ミントアドレスを変数にいれる
+    const mintAD = Mkey.meta.postTokenBalances[0].mint
+    console.log("ミントアドレスをゲットしました" + mintAD)
+    //MEからメタデータもってくる
+    metadata = await getMetadataME(mintAD);
+    //名前
+    const ArtName = metadata.name
+    //価格
+    const price = Math.abs((Mkey.meta.preBalances[0] - Mkey.meta.postBalances[0])) / solanaWeb3.LAMPORTS_PER_SOL;
 
-//足りない要素を入れてあげる
-//何がうれたか現物の名前
-//プライス　amount から計算してあげる　クラッシュするかも
-//日付　これも　 timestamp から変更してあげる
-//画像
+    //日付　
+    const dateString = new Date(Mkey.timestamp * 1000).toLocaleString();
+    
+    //画像
+    const picture = metadata.image 
+
 
   axios.post(DISCORD_URL,
     {
@@ -141,12 +148,12 @@ const postToDiscord = (txn) => {
           "fields": [
             {
                 "name": "Price",
-                "value": `SIGN ${txn.signature} SOL`,
+                "value": `${price} SOL`,
                 "inline": true
             },
             {
                 "name": "Mint",
-                "value": `MintAD`, //${mintAD}
+                "value": `${ArtName}`, //${mintAD}
                 "inline": true
             },
             {
@@ -160,8 +167,20 @@ const postToDiscord = (txn) => {
                 "inline": true
             }
           ],
+          "image": {
+                "url": `${picture}`,
+          }
         }
       ]
     }
   )
+}
+
+const getMetadataME = async (tokenPubKey) => {        
+    try {
+        const { data } = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + tokenPubKey);   
+        return data;
+    } catch (error) {
+        console.log("error fetching MEmetadata: ", error)                 
+    }
 }
