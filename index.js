@@ -10,7 +10,6 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-const { response } = require('express')
 
 
 const app = express();
@@ -117,15 +116,6 @@ app.use(express.json())
 const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzzQKzB3kjKOKpLYIjCi9xTmXw_6KzcD65cU3FRLFsR-JY9c-72zxAX2gNOZpweh4";
 
 app.post("/discord", async (req, res) => {
-  axios.interceptors.request.use(req =>{
-    console.log('リスエストはじめ', req.body[0])
-    //return request
-  })
-  axios.interceptors.response.use(res =>{
-    console.log('レスポンスはじめ', res)
-    //return response
-  })
-
   postToDiscord(req.body[0]);
 })
 
