@@ -119,15 +119,15 @@ app.post("/discord", async (req, res) => {
   postToDiscord(req.body[0]);
 })
 
-const postToDiscord = async (txn) => {  
+const postToDiscord = (txn) => {  
     try {
-    let Mkey = await solanaConnection.getTransaction(txn.signature);
+    let Mkey = solanaConnection.getTransaction(txn.signature);
     
     //ミントアドレスを変数にいれる
     const mintAD = Mkey.meta.postTokenBalances[0].mint
     console.log("ミントアドレスをゲットしました" + mintAD)
     //MEからメタデータもってくる
-    metadata = await getMetadataME(mintAD);
+    metadata = getMetadataME(mintAD);
     //名前
     const ArtName = metadata.name
     //価格
@@ -137,7 +137,7 @@ const postToDiscord = async (txn) => {
     //画像
     const picture = metadata.image 
 
-    await axios.post(DISCORD_URL,
+    axios.post(DISCORD_URL,
         {
         "embeds": [
             {
