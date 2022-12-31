@@ -119,7 +119,8 @@ app.post("/discord", async (req, res) => {
   postToDiscord(req.body[0]);
 })
 
-const postToDiscord = async (txn) => {
+const postToDiscord = async (txn) => {  
+    try {
     let Mkey = await solanaConnection.getTransaction(txn.signature);
     
     //ミントアドレスを変数にいれる
@@ -139,41 +140,43 @@ const postToDiscord = async (txn) => {
     const picture = metadata.image 
 
 
-  axios.post(DISCORD_URL,
-    {
-      "embeds": [
+    axios.post(DISCORD_URL,
         {
-          "title": "SALE",
-          "description": txn.description,
-          "fields": [
+        "embeds": [
             {
-                "name": "Price",
-                "value": `${price} SOL`,
-                "inline": true
-            },
-            {
-                "name": "Mint",
-                "value": `${ArtName}`, //${mintAD}
-                "inline": true
-            },
-            {
-                "name": "Date",
-                "value": dateString,
-                "inline": true
-            },
-            {
-                "name": "Explorer",
-                "value": `https://explorer.solana.com/tx/${txn.signature}`,
-                "inline": true
-            }
-          ],
-          "image": {
-                "url": `${picture}`,
-          }
-        }
-      ]
-    }
-  )
+            "title": "SALE",
+            "description": txn.description,
+            "fields": [
+                {
+                    "name": "Price",
+                    "value": `${price} SOL`,
+                    "inline": true
+                },
+                {
+                    "name": "Mint",
+                    "value": `${ArtName}`, //${mintAD}
+                    "inline": true
+                },
+                {
+                    "name": "Date",
+                    "value": dateString,
+                    "inline": true
+                },
+                {
+                    "name": "Explorer",
+                    "value": `https://explorer.solana.com/tx/${txn.signature}`,
+                    "inline": true
+                }
+            ],
+            "image": {
+                    "url": `${picture}`,
+                    }
+                }
+            ]
+        })
+ } catch (err) {
+    console.log("error while going through Podt to Discord: ", err);
+ }
 }
 
 const getMetadataME = async (tokenPubKey) => {        
