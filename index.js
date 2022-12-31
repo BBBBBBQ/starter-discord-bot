@@ -10,7 +10,7 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-const solanaWeb3 = require('@solana/web3.js');
+//const solanaWeb3 = require('@solana/web3.js');
 
 const app = express();
 // app.use(bodyParser.json());
@@ -120,38 +120,38 @@ app.post("/discord", async (req, res) => {
 })
 
 const postToDiscord = (txn) => {  
-    try {
-    let Mkey = solanaConnection.getTransaction(txn.signature);
+    // try {
+    // let Mkey = solanaConnection.getTransaction(txn.signature);
     
-    //ミントアドレスを変数にいれる
-    const mintAD = Mkey.meta.postTokenBalances[0].mint
-    console.log("ミントアドレスをゲットしました" + mintAD)
-    //MEからメタデータもってくる
-    metadata = getMetadataME(mintAD);
-    //名前
-    const ArtName = metadata.name
-    //価格
-    const price = Math.abs((Mkey.meta.preBalances[0] - Mkey.meta.postBalances[0])) / solanaWeb3.LAMPORTS_PER_SOL;
-    //日付　
-    const dateString = new Date(Mkey.timestamp * 1000).toLocaleString();
-    //画像
-    const picture = metadata.image 
+    // //ミントアドレスを変数にいれる
+    // const mintAD = Mkey.meta.postTokenBalances[0].mint
+    // console.log("ミントアドレスをゲットしました" + mintAD)
+    // //MEからメタデータもってくる
+    // metadata = getMetadataME(mintAD);
+    // //名前
+    // const ArtName = metadata.name
+    // //価格
+    // const price = Math.abs((Mkey.meta.preBalances[0] - Mkey.meta.postBalances[0])) / solanaWeb3.LAMPORTS_PER_SOL;
+    // //日付　
+    const dateString = new Date(txn.timestamp * 1000).toLocaleString();
+    // //画像
+    // const picture = metadata.image 
 
     axios.post(DISCORD_URL,
         {
         "embeds": [
             {
-            "title": "SALE",
+            "title": "SALE変わってるかためす",
             "description": txn.description,
             "fields": [
                 {
                     "name": "Price",
-                    "value": `${price} SOL`,
+                    "value": `000 SOL`,
                     "inline": true
                 },
                 {
                     "name": "Mint",
-                    "value": `${ArtName}`, //${mintAD}
+                    "value": `000`, //${mintAD}
                     "inline": true
                 },
                 {
@@ -166,14 +166,14 @@ const postToDiscord = (txn) => {
                 }
             ],
             "image": {
-                    "url": `${picture}`,
+                    "url": `picture`,
                     }
                 }
             ]
         })
-    } catch (e) {
-        console.log("error while going through Podt to Discord: ", e);
-    }
+    // } catch (e) {
+    //     console.log("error while going through Podt to Discord: ", e);
+    // }
 }
 
 const getMetadataME = async (tokenPubKey) => {        
