@@ -132,15 +132,12 @@ const postToDiscord = async (txn) => {
     const ArtName = metadata.name
     //価格
     const price = Math.abs((Mkey.meta.preBalances[0] - Mkey.meta.postBalances[0])) / solanaWeb3.LAMPORTS_PER_SOL;
-
     //日付　
     const dateString = new Date(Mkey.timestamp * 1000).toLocaleString();
-    
     //画像
     const picture = metadata.image 
 
-
-    axios.post(DISCORD_URL,
+    await axios.post(DISCORD_URL,
         {
         "embeds": [
             {
@@ -174,9 +171,9 @@ const postToDiscord = async (txn) => {
                 }
             ]
         })
- } catch (err) {
-    console.log("error while going through Podt to Discord: ", err);
- }
+    } catch (e) {
+        console.log("error while going through Podt to Discord: ", e);
+    }
 }
 
 const getMetadataME = async (tokenPubKey) => {        
