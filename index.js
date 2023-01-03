@@ -9,7 +9,7 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
-
+const solanaConnection = new solanaWeb3.Connection(url, 'confirmed');
 
 const app = express();
 // app.use(bodyParser.json());
