@@ -166,6 +166,7 @@ const getMetadataME = async (tokenPubKey) => {
       const { data } = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + tokenPubKey);   
       return data;
   } catch (error) {
-      console.log("error fetching MEmetadata: ", error)                 
+      console.log("error fetching MEmetadata: ", error)
+      return error                 
   }
 }
