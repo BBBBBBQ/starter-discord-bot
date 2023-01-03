@@ -41,12 +41,10 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
     }
 
     if(interaction.data.name == 'dm'){
-      // https://discord.com/developers/docs/resources/user#create-dm
       let c = (await discord_api.post(`/users/@me/channels`,{
         recipient_id: interaction.member.user.id
       })).data
       try{
-        // https://discord.com/developers/docs/resources/channel#create-message
         let res = await discord_api.post(`/channels/${c.id}/messages`,{
           content:'Yo! I got your slash command. I am not able to respond to DMs just slash commands.',
         })
@@ -56,7 +54,6 @@ app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
       }
 
       return res.send({
-        // https://discord.com/developers/docs/interactions/receiving-and-responding#responding-to-an-interaction
         type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
         data:{
           content:'👍'
@@ -84,7 +81,6 @@ app.get('/register_commands', async (req,res) =>{
   ]
   try
   {
-    // api docs - https://discord.com/developers/docs/interactions/application-commands#create-global-application-command
     let discord_response = await discord_api.put(
       `/applications/${APPLICATION_ID}/guilds/${GUILD_ID}/commands`,
       slash_commands
@@ -115,6 +111,8 @@ app.use(express.json())
 const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzzQKzB3kjKOKpLYIjCi9xTmXw_6KzcD65cU3FRLFsR-JY9c-72zxAX2gNOZpweh4";
 
 app.post("/discord", async (req, res) => {
+  const mint = await solanaConnection.getTransaction(req.body[0].signature)
+  console.log("ミント取って来れました" + mint)
   postToDiscord(req.body[0]);
 })
 
