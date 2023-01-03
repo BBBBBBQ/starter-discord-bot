@@ -118,14 +118,15 @@ app.post("/discord", async (req, res) => {
   const trn = await solanaConnection.getTransaction(req.body[0].signature)
   const mint = trn.meta.postTokenBalances[0].mint
   console.log("ミント取って来れました" + mint)
+  postToDiscord(req.body[0], mint);
   //getMetadataMEをする
-  const meta = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + mint);  
-  postToDiscord(req.body[0], mint, meta);
+  //const meta = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + mint);  
+  //postToDiscord(req.body[0], mint, meta);
   }catch(code){
     console.error("エラー" + code);}
 })
 
-const postToDiscord = (txn, mintAD, metadata) => {
+const postToDiscord = (txn, mintAD) => {
     const dateString = new Date(txn.timestamp * 1000).toLocaleString();
 
   axios.post(DISCORD_URL,
