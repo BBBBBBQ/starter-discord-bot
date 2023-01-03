@@ -119,7 +119,7 @@ app.post("/discord", async (req, res) => {
   const mint = trn.meta.postTokenBalances[0].mint
   console.log("ミント取って来れました" + mint)
   //getMetadataMEをする
-  const meta = await getMetadataME(mint);
+  const meta = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + mint);  
   postToDiscord(req.body[0], mint, meta);
   }catch(code){
     console.error("エラー" + code);}
