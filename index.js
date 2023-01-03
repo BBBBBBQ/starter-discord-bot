@@ -9,6 +9,9 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
+const solanaWeb3 = require('@solana/web3.js');
+const { Connection, programs } = require('@metaplex/js');
+const url = solanaWeb3.clusterApiUrl('mainnet-beta');
 const solanaConnection = new solanaWeb3.Connection(url, 'confirmed');
 
 const app = express();
