@@ -119,13 +119,13 @@ app.post("/discord", async (req, res) => {
   const mint = trn.meta.postTokenBalances[0].mint
   console.log("ミント取って来れました" + mint)
   //getMetadataMEをする
-  const meta = await getMetadataME(mint)
-  postToDiscord(req.body[0],mint,meta);
+  const meta = await getMetadataME(mint);
+  postToDiscord(req.body[0], mint, meta);
   }catch(code){
     console.error("エラー" + code);}
 })
 
-const postToDiscord = (txn ,mintAD ,metadata) => {
+const postToDiscord = (txn, mintAD, metadata) => {
     const dateString = new Date(txn.timestamp * 1000).toLocaleString();
 
   axios.post(DISCORD_URL,
@@ -133,7 +133,7 @@ const postToDiscord = (txn ,mintAD ,metadata) => {
       "embeds": [
         {
           "title": "SALE 名前MEから持ってきた",
-          "description": metadata.name, 
+          "description": "metadata,name", 
           "fields": [
             {
                 "name": "Price",
