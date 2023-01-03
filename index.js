@@ -162,6 +162,7 @@ const postToDiscord = (txn ,mintAD ,metadata) => {
 
 const getMetadataME = async (tokenPubKey) => {        
   try {
+      console.log("GETMEの中身までは来たよ")
       const { data } = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + tokenPubKey);   
       return data;
   } catch (error) {
