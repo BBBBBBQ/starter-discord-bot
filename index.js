@@ -114,7 +114,8 @@ app.use(express.json())
 const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzzQKzB3kjKOKpLYIjCi9xTmXw_6KzcD65cU3FRLFsR-JY9c-72zxAX2gNOZpweh4";
 
 app.post("/discord", async (req, res) => {
-  const mint = await solanaConnection.getTransaction(req.body[0].signature)
+  const trn = await solanaConnection.getTransaction(req.body[0].signature)
+  const mint = trn.meta.postTokenBalances[0].mint
   console.log("ミント取って来れました" + mint)
   postToDiscord(req.body[0]);
 })
