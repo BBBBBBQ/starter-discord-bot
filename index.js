@@ -117,37 +117,24 @@ app.post("/discord", async (req, res) => {
   const trn = await solanaConnection.getTransaction(req.body[0].signature)
   const mint = trn.meta.postTokenBalances[0].mint
   console.log("ミント取って来れました" + mint)
-  postToDiscord(req.body[0]);
+  //getMetadataMEをする
+  const meta = await getMetadataME(mint)
+  postToDiscord(req.body[0],mint,meta);
 })
 
-const postToDiscord = (txn) => {
+const postToDiscord = (txn ,mintAD ,metadata) => {
     const dateString = new Date(txn.timestamp * 1000).toLocaleString();
-//ミントアドレスを変数にいれる
-//const mintAD = txn.nfts[0].mint //⭕ここの指定がうまく行かない
-//console.log("ミントアドレスをゲットしました" + mintAD)
-//getMetadataMEをする
-
-//足りない要素を入れてあげる
-//何がうれたか現物の名前
-//プライス　amount から計算してあげる　クラッシュするかも
-//日付　これも　 timestamp から変更してあげる
-//画像
 
   axios.post(DISCORD_URL,
     {
       "embeds": [
         {
-          "title": "SALE更新確認",
-          "description": txn.description,
+          "title": "SALE 名前MEから持ってきた",
+          "description": metadata.name, 
           "fields": [
             {
                 "name": "Price",
-                "value": `SIGN ${txn.signature} SOL`,
-                "inline": true
-            },
-            {
-                "name": "Mint",
-                "value": `MintAD`, //${mintAD}
+                "value": `SIGN ${txn.signature} SOL`, //値段
                 "inline": true
             },
             {
@@ -161,8 +148,20 @@ const postToDiscord = (txn) => {
                 "inline": true
             }
           ],
+          "image": {
+            "url": `picture`, //絵
+            }
         }
       ]
     }
   )
+}
+
+const getMetadataME = async (tokenPubKey) => {        
+  try {
+      const { data } = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + tokenPubKey);   
+      return data;
+  } catch (error) {
+      console.log("error fetching MEmetadata: ", error)                 
+  }
 }
