@@ -114,16 +114,30 @@ app.use(express.json())
 const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzzQKzB3kjKOKpLYIjCi9xTmXw_6KzcD65cU3FRLFsR-JY9c-72zxAX2gNOZpweh4";
 
 app.post("/discord", async (req, res) => {
-  try{
-  const trn = await solanaConnection.getTransaction(req.body[0].signature)
-  const mint = trn.meta.postTokenBalances[0].mint
-  console.log("ミント取って来れました" + mint)
-  postToDiscord(req.body[0], mint);
+  var txtFile = "/tmp/test.txt";
+  var file = new File(txtFile,"write");
+  var str = JSON.stringify(req.body);
+
+  console.log("opening file...");
+  file.open(); 
+  console.log("writing file..");
+  file.writeline(str);
+  file.close();
+
+  //try catchもコメントアウト⭕
+  // try{  
+  //以下４行をコメントアウト⭕
+  // const trn = await solanaConnection.getTransaction(req.body[0].signature)
+  // const mint = trn.meta.postTokenBalances[0].mint
+  // console.log("ミント取って来れました" + mint)
+  // postToDiscord(req.body[0], mint);
+  
+  
   //getMetadataMEをする
   //const meta = await axios.get('https://api-mainnet.magiceden.dev/v2/tokens/' + mint);  
   //postToDiscord(req.body[0], mint, meta);
-  }catch(code){
-    console.error("エラー" + code);}
+  // }catch(code){
+    // console.error("エラー" + code);}
 })
 
 const postToDiscord = (txn, mintAD) => {
