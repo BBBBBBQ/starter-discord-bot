@@ -116,13 +116,24 @@ const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzz
 app.post("/discord", async (req, res) => {
   var txtFile = "/tmp/text.txt";
   var file = new File(txtFile,"write");
-  var str = JSON.stringify(req.body);
 
+  var fs = require('fs');
+
+//ファイルの書き込み関数
+function writeFile(path, data) {
+  fs.writeFile(path, data, function (err) {
+    if (err) {
+        throw err;
+    }
+  });
+}
+  var str = JSON.stringify(req.body);
+  
   console.log("opening file...");
-  file.open(); 
+  //file.open(); 
   console.log("writing file..");
-  file.writeline(str);
-  file.close();
+  writeFile(txtFile, str);
+  //file.close();
 
   //try catchもコメントアウト⭕
   // try{  
