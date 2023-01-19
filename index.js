@@ -114,7 +114,7 @@ app.use(express.json())
 const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzzQKzB3kjKOKpLYIjCi9xTmXw_6KzcD65cU3FRLFsR-JY9c-72zxAX2gNOZpweh4";
 
 app.post("/discord", async (req, res) => {
-  var txtFile = "/tmp/test.txt";
+  var txtFile = "/tmp/text.txt";
   var file = new File(txtFile,"write");
   var str = JSON.stringify(req.body);
 
