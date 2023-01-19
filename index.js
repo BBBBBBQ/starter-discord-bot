@@ -115,7 +115,7 @@ const DISCORD_URL = "https://discord.com/api/webhooks/1043483533714411561/wCAXzz
 
 app.post("/discord", async (req, res) => {
   var txtFile = "/tmp/text.txt";
-  var file = new File(txtFile,"write");
+  //var file = new File(txtFile,"write");
 
   var fs = require('fs');
 
@@ -128,7 +128,7 @@ function writeFile(path, data) {
   });
 }
   var str = JSON.stringify(req.body);
-  
+
   console.log("opening file...");
   //file.open(); 
   console.log("writing file..");
